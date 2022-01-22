@@ -53,14 +53,14 @@ namespace Memory_Game
             char x = pick.ToCharArray()[0];
             if (x.Equals('A')) return 0;
             else if (x.Equals('B')) return 1;
-            else if (x.Equals('C')) return 2;
-            else if (x.Equals('D')) return 3;
             return -1;
         }
 
         int getColumn(string pick)
         {
-            return pick.ToCharArray()[1] - 49;
+            int col =  pick.ToCharArray()[1] - 49;
+            if (col > 3) return -1;
+            return col;
         }
 
         void updateBoard(int x, int y)
@@ -95,16 +95,35 @@ namespace Memory_Game
                 Console.WriteLine("Enter card spot to reveal: ");
                 string pick = Console.ReadLine();
 
-                int row = getRow(pick);
+                int row = getRow(pick.ToUpper());
                 int column = getColumn(pick);
+                while (row == -1 || column == -1)
+                {
+                    Console.WriteLine("Please enter proper value: ");
+                    pick = Console.ReadLine();
+                    pick = pick.ToUpper();
+                    row = getRow(pick);
+                    column = getColumn(pick);
+                }
+
 
                 updateBoard(row, column);
                 drawBoard();
                 Console.WriteLine("Enter card spot to reveal: ");
                 pick = Console.ReadLine();
 
-                int _row = getRow(pick);
+                // TODO
+                // powtorzony klon walidacji row i col
+                int _row = getRow(pick.ToUpper());
                 int _column = getColumn(pick);
+                while (_row == -1 || _column == -1)
+                {
+                    Console.WriteLine("Please enter proper value: ");
+                    pick = Console.ReadLine();
+                    pick = pick.ToUpper();
+                    _row = getRow(pick);
+                    _column = getColumn(pick);
+                }
                 updateBoard(_row, _column);
                 drawBoard();
 
@@ -124,6 +143,11 @@ namespace Memory_Game
             TimeSpan ts = watch.Elapsed;
 
             Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
+
+            Scoreboard scoreboard = new Scoreboard();
+            string newScoreboardEntry = scoreboard.gatherScoreInfo(DateTime.Now, ts.TotalSeconds, moves);
+            scoreboard.updateScoreboard(newScoreboardEntry);
+            scoreboard.display();
         }
     }
 }

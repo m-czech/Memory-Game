@@ -26,8 +26,6 @@ namespace Memory_Game
                     restart = false;
                 }
             } while (restart);
-            
-            
         }
     }
 }
