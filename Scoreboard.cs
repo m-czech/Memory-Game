@@ -79,7 +79,7 @@ namespace Memory_Game
      
         void shiftArrayToTheRight(string[] array, int idx)
         {
-            for (int i = array.Length - 1; i >= idx; i--)
+            for (int i = array.Length - 1; i > idx; i--)
             {
                 array[i] = array[i - 1];
             }
@@ -96,6 +96,7 @@ namespace Memory_Game
             while (entry != null)
             {
                 scoreboard[counter] = entry;
+                entry = sr.ReadLine();
                 counter += 1;
             }
             closeFileToRead();
@@ -125,6 +126,8 @@ namespace Memory_Game
             openFileToWrite();
             foreach(string s in scoreboard)
             {
+                if (s == null)
+                    break;
                 sw.WriteLine(s);
             }
             closeFileToWrite();

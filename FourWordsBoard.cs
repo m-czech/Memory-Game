@@ -83,15 +83,21 @@ namespace Memory_Game
 
         public override void play()
         {
+            Console.WriteLine("Level: easy");
+
+
+
             int moves = 0;
             int matches = 0;
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
+            Console.Clear();
            
             drawBoard();
             while (matches < 4)
             {
+                Console.WriteLine("Chances left: {0}", (10 - moves));
                 Console.WriteLine("Enter card spot to reveal: ");
                 string pick = Console.ReadLine();
 
@@ -137,17 +143,34 @@ namespace Memory_Game
                     reverseBoard(_row, _column);
                 }
 
-                moves += 1;
+                if (++moves > 10)
+                {
+                    break;
+                };
+
+
+
             }
             watch.Stop();
             TimeSpan ts = watch.Elapsed;
 
-            Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
 
             Scoreboard scoreboard = new Scoreboard();
-            string newScoreboardEntry = scoreboard.gatherScoreInfo(DateTime.Now, ts.TotalSeconds, moves);
-            scoreboard.updateScoreboard(newScoreboardEntry);
+            if (moves <= 10)
+            {
+                Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
+
+                
+                string newScoreboardEntry = scoreboard.gatherScoreInfo(DateTime.Now, ts.TotalSeconds, moves);
+                scoreboard.updateScoreboard(newScoreboardEntry);
+            }
+            else
+            {
+                Console.WriteLine("Unfortunately, you have exceeded all chances.\nTry again!");
+            }
             scoreboard.display();
+
+
         }
     }
 }
