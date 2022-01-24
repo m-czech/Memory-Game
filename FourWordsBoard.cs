@@ -5,13 +5,9 @@ namespace Memory_Game
 {
     public class FourWordsBoard : Board
     {
-        string[][] boardPattern;
-        string[][] currentBoard;
-        public FourWordsBoard(string[] words)
-        {
-            boardPattern = generateBoardPattern(words);
-            currentBoard = createBoard(0);
-        }
+        
+       public FourWordsBoard(string[] words, int rows) : base(words, rows) {}
+
         public override string[][] generateBoardPattern(string[] words)
         {
             boardPattern = new string[2][];
@@ -47,107 +43,35 @@ namespace Memory_Game
         }
 
 
-     
-        int getRow(string pick)
+
+        public override int getRow(string pick)
         {
+            pick = pick.ToUpper();
             char x = pick.ToCharArray()[0];
-            if (x.Equals('A')) return 0;
-            else if (x.Equals('B')) return 1;
-            return -1;
-        }
+            while (true)
+            {
+                if (x.Equals('A'))
+                {
+                    return 0;
+                }
+                else if (x.Equals('B'))
+                {
+                    return 1;
+                }
+             
+                Console.WriteLine("Please enter proper value: ");
+                pick = Console.ReadLine();
+                pick = pick.ToUpper();
+                x = pick.ToCharArray()[0];
+            }
 
-        int getColumn(string pick)
-        {
-            int col =  pick.ToCharArray()[1] - 49;
-            if (col > 3) return -1;
-            return col;
-        }
-
-        void updateBoard(int x, int y)
-        {
-            currentBoard[x][y] = boardPattern[x][y];
-        }
-
-        void reverseBoard(int x, int y)
-        {
-            currentBoard[x][y] = "X";
-        }
-
-        void drawBoard()
+        }     
+        public override void drawBoard()
         {
             Console.WriteLine(String.Format("{0,-14} {1,-14} {2,-14} {3,-14} {4,-14}", " ", 1, 2, 3, 4));
             Console.WriteLine(String.Format("{0,-14} {1,-14} {2,-14} {3,-14} {4,-14}", 'A', currentBoard[0][0], currentBoard[0][1], currentBoard[0][2], currentBoard[0][3]));
             Console.WriteLine(String.Format("{0,-14} {1,-14} {2,-14} {3,-14} {4,-14}", 'B', currentBoard[1][0], currentBoard[1][1], currentBoard[1][2], currentBoard[1][3]));
             Console.WriteLine('\n');
-        }
-
-        public override void play()
-        {
-            int moves = 0;
-            int matches = 0;
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-
-           
-            drawBoard();
-            while (matches < 4)
-            {
-                Console.WriteLine("Enter card spot to reveal: ");
-                string pick = Console.ReadLine();
-
-                int row = getRow(pick.ToUpper());
-                int column = getColumn(pick);
-                while (row == -1 || column == -1)
-                {
-                    Console.WriteLine("Please enter proper value: ");
-                    pick = Console.ReadLine();
-                    pick = pick.ToUpper();
-                    row = getRow(pick);
-                    column = getColumn(pick);
-                }
-
-
-                updateBoard(row, column);
-                drawBoard();
-                Console.WriteLine("Enter card spot to reveal: ");
-                pick = Console.ReadLine();
-
-                // TODO
-                // powtorzony klon walidacji row i col
-                int _row = getRow(pick.ToUpper());
-                int _column = getColumn(pick);
-                while (_row == -1 || _column == -1)
-                {
-                    Console.WriteLine("Please enter proper value: ");
-                    pick = Console.ReadLine();
-                    pick = pick.ToUpper();
-                    _row = getRow(pick);
-                    _column = getColumn(pick);
-                }
-                updateBoard(_row, _column);
-                drawBoard();
-
-
-                if (boardPattern[row][column].Equals(boardPattern[_row][_column])) {
-                    matches += 1;
-                }
-                else
-                {
-                    reverseBoard(row, column);
-                    reverseBoard(_row, _column);
-                }
-
-                moves += 1;
-            }
-            watch.Stop();
-            TimeSpan ts = watch.Elapsed;
-
-            Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
-
-            Scoreboard scoreboard = new Scoreboard();
-            string newScoreboardEntry = scoreboard.gatherScoreInfo(DateTime.Now, ts.TotalSeconds, moves);
-            scoreboard.updateScoreboard(newScoreboardEntry);
-            scoreboard.display();
         }
     }
 }

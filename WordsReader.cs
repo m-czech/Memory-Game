@@ -21,6 +21,7 @@ public class WordsReader
 
     public static string[] getRandomWords()
     {
+        // TODO get user's path
         string[] words = readWords(@"C:\Users\Mat\source\repos\Memory-Game\Words.txt");
         string[] randomWords = new string[8];
         bool[] wasWordChosenBefore = new bool[words.Length];
