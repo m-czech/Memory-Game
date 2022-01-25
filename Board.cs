@@ -144,19 +144,7 @@ namespace Memory_Game
 
 
             Scoreboard scoreboard = new Scoreboard();
-            if (moves <= maxMoves)
-            {
-                Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
-
-
-                string newScoreboardEntry = scoreboard.gatherScoreInfo(DateTime.Now, ts.TotalSeconds, moves);
-                scoreboard.updateScoreboard(newScoreboardEntry);
-            }
-            else
-            {
-                Console.WriteLine("Unfortunately, you have exceeded all chances.\nTry again!");
-            }
-
+            scoreboard.update(moves, maxMoves, ts);
             scoreboard.display();
         }
     }

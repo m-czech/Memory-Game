@@ -83,7 +83,7 @@ namespace Memory_Game
             }
         }
 
-        public void updateScoreboard(string newEntry)
+        void updateScoreboard(string newEntry)
         {
             openFileToRead();
             string[] scoreboard = new string[10];
@@ -136,6 +136,22 @@ namespace Memory_Game
             Console.WriteLine("Enter your nickname: ");
             string nickname = Console.ReadLine();
             return String.Format("{0}|{1:d}|{2}|{3}", nickname, date, time, triesAmount);
+        }
+
+        public void update(int moves, int maxMoves, TimeSpan time)
+        {
+            if (moves <= maxMoves)
+            {
+                Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", time.TotalSeconds, moves);
+
+
+                string newScoreboardEntry = gatherScoreInfo(DateTime.Now, time.TotalSeconds, moves);
+                updateScoreboard(newScoreboardEntry);
+            }
+            else
+            {
+                Console.WriteLine("Unfortunately, you have exceeded all chances.\nTry again!");
+            }
         }
 
     }
