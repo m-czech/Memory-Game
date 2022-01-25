@@ -8,12 +8,13 @@ namespace Memory_Game
     {
         StreamReader sr;
         StreamWriter sw;
+        string path = String.Format("{0}\\Scoreboard.txt", Directory.GetCurrentDirectory());
 
         void openFileToRead()
         {
             try
             {
-                sr = new StreamReader(@"C:\Users\Mat\source\repos\Memory-Game\Scoreboard.txt");
+                sr = new StreamReader(path);
             }
             catch (Exception e)
             {
@@ -22,7 +23,6 @@ namespace Memory_Game
                 Environment.Exit(1);
             }
         }
-
         void closeFileToRead()
         {
             try
@@ -39,7 +39,7 @@ namespace Memory_Game
         {
             try
             {
-                sw = new StreamWriter(@"C:\Users\Mat\source\repos\Memory-Game\Scoreboard.txt");
+                sw = new StreamWriter(path);
             }
             catch (Exception e)
             {
@@ -75,8 +75,6 @@ namespace Memory_Game
             Console.WriteLine('\n');
         }
 
-
-
         void shiftArrayToTheRight(string[] array, int idx)
         {
             for (int i = array.Length - 1; i > idx; i--)
@@ -99,8 +97,8 @@ namespace Memory_Game
                 entry = sr.ReadLine();
                 counter += 1;
             }
-            closeFileToRead();
 
+            closeFileToRead();
 
             string[] splitNewEntry = newEntry.Split('|');
             float newTime = float.Parse(splitNewEntry[2]);
@@ -131,12 +129,10 @@ namespace Memory_Game
                 sw.WriteLine(s);
             }
             closeFileToWrite();
-
         }
 
         public string gatherScoreInfo(DateTime date, double time, int triesAmount)
         {
-            // do poprawy zaokroglenie do 2 cyfr po przecinku (max 3)
             Console.WriteLine("Enter your nickname: ");
             string nickname = Console.ReadLine();
             return String.Format("{0}|{1:d}|{2}|{3}", nickname, date, time, triesAmount);

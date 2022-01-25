@@ -5,7 +5,6 @@ namespace Memory_Game
 {
     public abstract class Board
     {
-
         public string[][] boardPattern;
         public string[][] currentBoard;
 
@@ -16,6 +15,8 @@ namespace Memory_Game
         }
 
         public abstract string[][] generateBoardPattern(string[] words);
+        public abstract int getRow(string pick);
+        public abstract void drawBoard();
 
         public string[][] createBoard(int rows)
         {
@@ -30,25 +31,47 @@ namespace Memory_Game
             }
             return board;
         }
-
-        public abstract int getRow(string pick);
+    
         public int getColumn(string pick)
         {
-            int col = pick.ToCharArray()[1] - 49;
-            while (true)
+            int column = pick.ToCharArray()[1] - 49;
+            if (column < 4)
             {
-                if (col < 4)
-                {
-                    return col;
-                }
-
-                Console.WriteLine("Please enter proper value: ");
-                pick = Console.ReadLine();
-                col = pick.ToCharArray()[1] - 49;
+                return column;
             }
+            return -1;
         }
-        public abstract void drawBoard();
 
+        public string getUserInput()
+        {
+            Console.WriteLine("Enter card spot to reveal: ");
+            string pick = Console.ReadLine();
+            
+            while (!validateInput(pick))
+            {
+                Console.WriteLine("Wrong coordinates. Try again!");
+                pick = Console.ReadLine();
+            }
+            return pick.ToUpper();           
+        }
+
+        bool validateInput(string pick)
+        {
+            if (pick.Length != 2)
+            {
+                return false;
+            }
+            if (!char.IsLetter(pick.ToCharArray()[0]))
+            {
+                return false;
+            }
+            if (!char.IsNumber(pick.ToCharArray()[1]))
+            {
+                return false;
+            }
+            return true;
+        }
+    
         void updateBoard(int x, int y)
         {
             currentBoard[x][y] = boardPattern[x][y];
@@ -58,11 +81,8 @@ namespace Memory_Game
         {
             currentBoard[x][y] = "X";
         }
-        public void play(int maxMoves)
+        public void play(int maxMoves, int cardsAmount)
         {
-            Console.WriteLine("Level: easy");
-
-
             int moves = 0;
             int matches = 0;
 
@@ -72,25 +92,33 @@ namespace Memory_Game
             Console.Clear();
 
             drawBoard();
-            while (matches < 4)
+            while (matches < cardsAmount)
             {
                 Console.WriteLine("Chances left: {0}", (maxMoves - moves));
-                Console.WriteLine("Enter card spot to reveal: ");
-                string pick = Console.ReadLine();
 
-                int row = getRow(pick);
-                int column = getColumn(pick);
-
+                string pick;
+                int row, column;
+                do
+                {
+                    pick = getUserInput();
+                    row = getRow(pick);
+                    column = getColumn(pick);
+                }
+                while (row == -1 || column == -1);
+                
 
                 updateBoard(row, column);
                 drawBoard();
-                Console.WriteLine("Enter card spot to reveal: ");
-                pick = Console.ReadLine();
-
-
-                int _row = getRow(pick);
-                int _column = getColumn(pick);
-
+                
+                int _row, _column;
+                do
+                {
+                    pick = getUserInput();
+                    _row = getRow(pick);
+                    _column = getColumn(pick);
+                }
+                while (_row == -1 || _column == -1);
+                
 
                 updateBoard(_row, _column);
                 drawBoard();
@@ -106,20 +134,17 @@ namespace Memory_Game
                     reverseChanges(_row, _column);
                 }
 
-                if (++moves > 10)
+                if (++moves > maxMoves)
                 {
                     break;
                 };
-
-
-
             }
             watch.Stop();
             TimeSpan ts = watch.Elapsed;
 
 
             Scoreboard scoreboard = new Scoreboard();
-            if (moves <= 10)
+            if (moves <= maxMoves)
             {
                 Console.WriteLine("Congratulations! You have beaten the game in {0} seconds and after {1} tries", ts.TotalSeconds, moves);
 
@@ -131,9 +156,8 @@ namespace Memory_Game
             {
                 Console.WriteLine("Unfortunately, you have exceeded all chances.\nTry again!");
             }
+
             scoreboard.display();
-
-
         }
     }
 

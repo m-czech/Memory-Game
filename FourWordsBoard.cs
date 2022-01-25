@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace Memory_Game
 {
     public class FourWordsBoard : Board
-    {
-        
+    {  
        public FourWordsBoard(string[] words, int rows) : base(words, rows) {}
-
         public override string[][] generateBoardPattern(string[] words)
         {
             boardPattern = new string[2][];
@@ -22,7 +19,7 @@ namespace Memory_Game
             }
 
             int counter = 0;
-            int midcounter = 0;
+            int midCounter = 0;
             while (counter < 4)
             {
                 int row = RandomNumber.get(2);
@@ -31,40 +28,28 @@ namespace Memory_Game
                 if (boardPattern[row][column].Equals("X"))
                 {
                     boardPattern[row][column] = words[counter];
-                    midcounter += 1;
-                    if (midcounter >= 2)
+                    midCounter += 1;
+                    if (midCounter >= 2)
                     {
                         counter += 1;
-                        midcounter = 0;
+                        midCounter = 0;
                     }
                 }
             }
             return boardPattern;
         }
-
-
-
         public override int getRow(string pick)
         {
-            pick = pick.ToUpper();
             char x = pick.ToCharArray()[0];
-            while (true)
+            if (x.Equals('A'))
             {
-                if (x.Equals('A'))
-                {
-                    return 0;
-                }
-                else if (x.Equals('B'))
-                {
-                    return 1;
-                }
-             
-                Console.WriteLine("Please enter proper value: ");
-                pick = Console.ReadLine();
-                pick = pick.ToUpper();
-                x = pick.ToCharArray()[0];
+                return 0;
             }
-
+            else if (x.Equals('B'))
+            {
+                return 1;
+            }
+            return -1;
         }     
         public override void drawBoard()
         {

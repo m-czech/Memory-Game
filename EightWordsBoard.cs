@@ -45,32 +45,24 @@ namespace Memory_Game
 
         public override int getRow(string pick)
         {
-            pick = pick.ToUpper();
             char x = pick.ToCharArray()[0];
-            while (true)
+            if (x.Equals('A'))
             {
-                if (x.Equals('A'))
-                {
-                    return 0;
-                }
-                else if (x.Equals('B'))
-                {
-                    return 1;
-                }
-                else if (x.Equals('C'))
-                {
-                    return 2;
-                }
-                else if (x.Equals('D'))
-                {
-                    return 3;
-                }
-
-                Console.WriteLine("Please enter proper value: ");
-                pick = Console.ReadLine();
-                pick = pick.ToUpper();
-                x = pick.ToCharArray()[0];
+                return 0;
             }
+            else if (x.Equals('B'))
+            {
+                return 1;
+            }
+            else if (x.Equals('C'))
+            {
+                return 2;
+            }
+            else if (x.Equals('D'))
+            {
+                return 3;
+            }
+            return -1;
         }
 
         public override void drawBoard()

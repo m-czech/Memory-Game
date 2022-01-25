@@ -20,13 +20,15 @@ public class Menu
         string choice = Console.ReadLine();
         if (choice.Equals("1"))
         {
+            Console.WriteLine("Level: easy");
             Board board = new FourWordsBoard(words, 2);
-            board.play(10);
+            board.play(10, 4);
         }
         else if (choice.Equals("2"))
         {
+            Console.WriteLine("Level: hard");
             Board board = new EightWordsBoard(words, 4);
-            board.play(15);
+            board.play(15, 8);
         }
         else
         {
@@ -45,6 +47,7 @@ public class Menu
         {
             display();
             chooseGameDifficulty();
+            playAgain();
         }
         else if (!choice.Equals("n"))
         {

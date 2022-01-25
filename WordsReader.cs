@@ -4,13 +4,15 @@ public class WordsReader
 {
     public WordsReader() { }
 
-    static string[] readWords(string filename)
+    static string[] readWords(string path)
     {
-        if (File.Exists(filename)) {
-            return File.ReadAllLines(filename);
+        if (File.Exists(path)) {
+            
+            return File.ReadAllLines(path);
         }
         else
         {
+            Console.WriteLine(path);
             Console.WriteLine("File does not exists. Exiting ...");
             Environment.Exit(1);
         }
@@ -22,7 +24,8 @@ public class WordsReader
     public static string[] getRandomWords()
     {
         // TODO get user's path
-        string[] words = readWords(@"C:\Users\Mat\source\repos\Memory-Game\Words.txt");
+        string path = String.Format("{0}\\Words.txt", Directory.GetCurrentDirectory());
+        string[] words = readWords(path);
         string[] randomWords = new string[8];
         bool[] wasWordChosenBefore = new bool[words.Length];
 
